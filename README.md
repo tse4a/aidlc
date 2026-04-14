@@ -51,14 +51,12 @@ aidlc/
 │   ├── settings.json          # Enables superpowers plugin
 │   └── skills/                # Local skills (auto-loaded)
 │       ├── secure-code/
-│       │   ├── SKILL.md       # Quick checklist
-│       │   └── references/    # Deep-dive guides
 │       ├── pre-commit/
-│       │   ├── SKILL.md
-│       │   └── references/
-│       └── write-tests/
-│           ├── SKILL.md
-│           └── references/
+│       ├── write-tests/
+│       └── sync-upstream/     # Incorporate upstream updates
+├── .github/
+│   └── workflows/
+│       └── check-upstream.yml # Weekly upstream sync check
 ├── docs/                      # Reference materials
 │   ├── best-practices.md
 │   └── pre-commit-checklist.md
@@ -109,8 +107,13 @@ Project-specific skills in `.claude/skills/` with token-efficient structure:
 | `secure-code` | Security hardening | `/secure-code` |
 | `pre-commit` | Quality checks | `/pre-commit` |
 | `write-tests` | TDD workflow | `/write-tests` |
+| `sync-upstream` | Incorporate AWS AIDLC updates | `/sync-upstream` |
 
 Skills auto-trigger based on context (e.g., "security review" loads secure-code).
+
+## Staying Updated
+
+A GitHub Action checks the [upstream AWS AIDLC repo](https://github.com/awslabs/aidlc-workflows) weekly for updates. When changes are detected, it creates an issue. Use `/sync-upstream` to review and incorporate relevant changes.
 
 ## Key Principles
 

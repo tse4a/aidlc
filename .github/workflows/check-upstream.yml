@@ -1,0 +1,203 @@
+name: Check Upstream AIDLC Updates
+
+on:
+  schedule:
+    # Run weekly on Mondays at 9am UTC
+    - cron: '0 9 * * 1'
+  workflow_dispatch:
+    inputs:
+      force_check:
+        description: 'Force check even if no changes detected'
+        required: false
+        default: 'false'
+
+env:
+  UPSTREAM_REPO: awslabs/aidlc-workflows
+  UPSTREAM_BRANCH: main
+
+jobs:
+  check-updates:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+      issues: write
+
+    steps:
+      - name: Checkout this repo
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Get last checked commit
+        id: last-check
+        run: |
+          if [ -f .github/upstream-last-commit ]; then
+            echo "commit=$(cat .github/upstream-last-commit)" >> $GITHUB_OUTPUT
+          else
+            echo "commit=" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Fetch upstream info
+        id: upstream
+        run: |
+          # Get latest commit from upstream
+          LATEST=$(gh api repos/${{ env.UPSTREAM_REPO }}/commits/${{ env.UPSTREAM_BRANCH }} --jq '.sha')
+          echo "latest_commit=$LATEST" >> $GITHUB_OUTPUT
+
+          # Get commit date and message
+          COMMIT_DATE=$(gh api repos/${{ env.UPSTREAM_REPO }}/commits/$LATEST --jq '.commit.committer.date')
+          COMMIT_MSG=$(gh api repos/${{ env.UPSTREAM_REPO }}/commits/$LATEST --jq '.commit.message' | head -1)
+          echo "commit_date=$COMMIT_DATE" >> $GITHUB_OUTPUT
+          echo "commit_msg=$COMMIT_MSG" >> $GITHUB_OUTPUT
+
+          # Check if there are new commits
+          if [ "$LATEST" = "${{ steps.last-check.outputs.commit }}" ]; then
+            echo "has_updates=false" >> $GITHUB_OUTPUT
+          else
+            echo "has_updates=true" >> $GITHUB_OUTPUT
+          fi
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Fetch upstream changes
+        if: steps.upstream.outputs.has_updates == 'true' || github.event.inputs.force_check == 'true'
+        run: |
+          # Clone upstream repo
+          git clone --depth=50 https://github.com/${{ env.UPSTREAM_REPO }}.git upstream-aidlc
+
+          # Generate diff summary
+          cd upstream-aidlc
+
+          # Get recent commits (since last check or last 10)
+          if [ -n "${{ steps.last-check.outputs.commit }}" ]; then
+            git log --oneline ${{ steps.last-check.outputs.commit }}..HEAD > ../upstream-commits.txt 2>/dev/null || \
+            git log --oneline -10 > ../upstream-commits.txt
+          else
+            git log --oneline -10 > ../upstream-commits.txt
+          fi
+
+          # List changed files
+          if [ -n "${{ steps.last-check.outputs.commit }}" ]; then
+            git diff --name-only ${{ steps.last-check.outputs.commit }}..HEAD > ../upstream-changed-files.txt 2>/dev/null || \
+            git diff --name-only HEAD~10..HEAD > ../upstream-changed-files.txt
+          else
+            git diff --name-only HEAD~10..HEAD > ../upstream-changed-files.txt
+          fi
+
+          cd ..
+
+      - name: Analyze changes
+        if: steps.upstream.outputs.has_updates == 'true' || github.event.inputs.force_check == 'true'
+        id: analyze
+        run: |
+          # Categorize changes
+          RULE_CHANGES=$(grep -E "rule-details|rules" upstream-changed-files.txt 2>/dev/null | wc -l || echo 0)
+          TEMPLATE_CHANGES=$(grep -E "template" upstream-changed-files.txt 2>/dev/null | wc -l || echo 0)
+          DOC_CHANGES=$(grep -E "\.md$|docs/" upstream-changed-files.txt 2>/dev/null | wc -l || echo 0)
+
+          echo "rule_changes=$RULE_CHANGES" >> $GITHUB_OUTPUT
+          echo "template_changes=$TEMPLATE_CHANGES" >> $GITHUB_OUTPUT
+          echo "doc_changes=$DOC_CHANGES" >> $GITHUB_OUTPUT
+
+          # Determine priority
+          if [ "$RULE_CHANGES" -gt 0 ]; then
+            echo "priority=high" >> $GITHUB_OUTPUT
+          elif [ "$TEMPLATE_CHANGES" -gt 0 ]; then
+            echo "priority=medium" >> $GITHUB_OUTPUT
+          else
+            echo "priority=low" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Create issue for review
+        if: steps.upstream.outputs.has_updates == 'true'
+        run: |
+          # Build issue body
+          cat << 'EOF' > issue-body.md
+          ## Upstream AIDLC Updates Detected
+
+          The [AWS AIDLC repository](https://github.com/${{ env.UPSTREAM_REPO }}) has new changes that may be relevant to this toolkit.
+
+          ### Summary
+
+          - **Latest upstream commit:** `${{ steps.upstream.outputs.latest_commit }}`
+          - **Commit date:** ${{ steps.upstream.outputs.commit_date }}
+          - **Commit message:** ${{ steps.upstream.outputs.commit_msg }}
+          - **Priority:** ${{ steps.analyze.outputs.priority }}
+
+          ### Changes Detected
+
+          | Category | Count |
+          |----------|-------|
+          | Rule changes | ${{ steps.analyze.outputs.rule_changes }} |
+          | Template changes | ${{ steps.analyze.outputs.template_changes }} |
+          | Documentation changes | ${{ steps.analyze.outputs.doc_changes }} |
+
+          ### Recent Commits
+
+          ```
+          EOF
+
+          cat upstream-commits.txt >> issue-body.md
+
+          cat << 'EOF' >> issue-body.md
+          ```
+
+          ### Changed Files
+
+          ```
+          EOF
+
+          cat upstream-changed-files.txt >> issue-body.md
+
+          cat << 'EOF' >> issue-body.md
+          ```
+
+          ### How to Review
+
+          Use the `/sync-upstream` skill to review and incorporate these changes:
+
+          ```
+          /sync-upstream
+
+          Review the upstream AIDLC changes from issue #XXX
+          ```
+
+          The skill will guide you through:
+          1. Analyzing which changes are relevant
+          2. Adapting changes to our streamlined format
+          3. Creating a PR with meaningful descriptions
+
+          ### Links
+
+          - [Upstream repo](https://github.com/${{ env.UPSTREAM_REPO }})
+          - [Compare changes](https://github.com/${{ env.UPSTREAM_REPO }}/compare/${{ steps.last-check.outputs.commit }}...${{ steps.upstream.outputs.latest_commit }})
+
+          ---
+
+          *This issue was automatically created by the upstream sync workflow.*
+          EOF
+
+          # Create issue
+          gh issue create \
+            --title "🔄 Upstream AIDLC updates available (${{ steps.analyze.outputs.priority }} priority)" \
+            --body-file issue-body.md \
+            --label "upstream-sync,automated"
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Update last checked commit
+        if: steps.upstream.outputs.has_updates == 'true'
+        run: |
+          echo "${{ steps.upstream.outputs.latest_commit }}" > .github/upstream-last-commit
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add .github/upstream-last-commit
+          git commit -m "chore: update upstream last-checked commit" || true
+          git push || true
+
+      - name: No updates summary
+        if: steps.upstream.outputs.has_updates == 'false' && github.event.inputs.force_check != 'true'
+        run: |
+          echo "✅ No new upstream changes since last check"
+          echo "Last checked commit: ${{ steps.last-check.outputs.commit }}"

@@ -74,6 +74,7 @@ Project skills in `.claude/skills/` (token-efficient structure):
 | `/secure-code` | Security hardening | Dockerfile, shell, API, database |
 | `/pre-commit` | Quality checks | Before every commit |
 | `/write-tests` | TDD workflow | Writing tests |
+| `/sync-upstream` | Incorporate AWS AIDLC updates | When upstream sync issue is created |
 
 Each skill has:
 - `SKILL.md` — Quick checklist (auto-loaded)
