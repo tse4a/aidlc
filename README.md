@@ -1,151 +1,82 @@
-# AIDLC Workshop
+# AIDLC — AI-Driven Development Life Cycle
 
-AI-Driven Development Life Cycle (AIDLC) workshop materials adapted from 
-[AWS AIDLC](https://github.com/awslabs/aidlc-workflows) for structured 
-development workshops.
+A practical toolkit for AI-assisted software development. Based on 
+[AWS AI-DLC](https://github.com/awslabs/aidlc-workflows), streamlined for 
+everyday use.
 
 ## What is AIDLC?
 
-AIDLC is a structured yet adaptive software development workflow that:
+AIDLC is a structured workflow that helps you:
 
-- **Analyzes requirements** and asks clarifying questions
-- **Plans approaches** based on complexity and risk  
-- **Adapts depth** — thorough for complex work, streamlined for simple changes
-- **Documents decisions** with complete audit trail
-- **Enforces quality gates** with checkpoints and approvals
+- **Clarify requirements** before writing code
+- **Design approaches** based on complexity
+- **Track decisions** with a clear audit trail
+- **Maintain quality** through gates and checklists
+
+It scales from quick fixes to complex features — use what you need.
 
 ## Quick Start
 
-### For Your Project
+### Option 1: Copy to Your Project
 
-1. Copy this repo into your project's `workshop/` directory (or use standalone)
-2. Customize `templates/tech-env.md` for your stack
-3. Fill in `inputs/<team>-vision.md` with your feature vision
+```bash
+# Copy the essentials
+cp AIDLC.md /path/to/your/project/
+mkdir -p /path/to/your/project/aidlc-docs
+```
+
+### Option 2: Reference This Repo
+
+Add to your project's CLAUDE.md or instructions:
+```
+For complex features, follow the AIDLC workflow from [path/to/AIDLC.md]
+```
 
 ### Starting a Session
 
 ```
-Read AIDLC-WORKSHOP.md and follow the AIDLC workflow for this session.
-```
-
-### Resuming After a Break
-
-```
-Read AIDLC-WORKSHOP.md, then go to aidlc-docs/aidlc-state.md,
-find the first unchecked item, and resume from that point.
+Read AIDLC.md. Help me build [brief description].
 ```
 
 ## Directory Structure
 
 ```
-aidlc-workshop/
-├── AIDLC-WORKSHOP.md          # Main workflow (read this first)
-├── FACILITATOR-GUIDE.md       # For workshop facilitators
-├── README.md                  # This file
-├── .aidlc-rule-details/       # AIDLC methodology rules
-│   ├── common/                # Core workflow rules
-│   │   ├── process-overview.md
-│   │   ├── session-continuity.md
-│   │   ├── question-format-guide.md
-│   │   ├── content-validation.md
-│   │   ├── depth-levels.md
-│   │   ├── error-handling.md
-│   │   ├── terminology.md
-│   │   ├── welcome-message.md
-│   │   ├── overconfidence-prevention.md
-│   │   └── workflow-changes.md
-│   ├── operations/
-│   │   └── operations-overview.md
-│   └── extensions/
-│       └── security-baseline.md
-├── templates/                 # Document templates
-│   ├── vision-brownfield.md   # For adding to existing code
-│   ├── vision-greenfield.md   # For new projects
-│   ├── tech-env.md            # Technical environment (customize this)
-│   ├── operations/            # Production readiness
-│   │   ├── production-readiness.md
-│   │   ├── deployment-checklist.md
-│   │   └── observability-checklist.md
-│   └── optional/              # Time-permitting stages
-│       ├── user-stories.md
-│       ├── units-generation.md
-│       ├── nfr-requirements.md
-│       ├── nfr-design.md
-│       └── infrastructure-design.md
-├── inputs/                    # Team input documents
-│   └── .gitkeep
-├── skills/                    # On-demand development skills
-│   ├── README.md              # Skills overview
+aidlc/
+├── AIDLC.md                   # Main workflow (start here)
+├── skills/                    # On-demand development guidance
 │   ├── secure-code.md         # Security hardening
 │   ├── pre-commit.md          # Quality checks
 │   └── write-tests.md         # TDD workflow
-├── docs/                      # Best practices & guides
-│   ├── best-practices.md      # Development best practices
-│   └── pre-commit-checklist.md # Quick reference
-├── SOLO-MODE.md               # Single-person workflow
-└── aidlc-docs/                # Generated during workshop
-    └── .gitkeep
+├── docs/                      # Reference materials
+│   ├── best-practices.md      # Development guidelines
+│   └── pre-commit-checklist.md
+├── templates/                 # Document templates
+│   ├── tech-env.md            # Technical environment
+│   ├── vision-brownfield.md   # Feature in existing code
+│   ├── vision-greenfield.md   # New project
+│   └── operations/            # Production readiness
+└── .aidlc-rule-details/       # Detailed methodology rules
 ```
 
 ## The Three Phases
 
-### 🔵 INCEPTION PHASE (Day 1)
-**Focus**: WHAT to build and WHY
+| Phase | Focus | When Complete |
+|-------|-------|---------------|
+| 🔵 **Inception** | Understand & Design | Requirements and design approved |
+| 🟢 **Construction** | Build & Test | Code complete, tests pass |
+| 🟡 **Operations** | Ship & Maintain | Deployed or ready to deploy |
 
-- Workspace Detection
-- Reverse Engineering (brownfield)
-- Requirements Analysis
-- Cross-Team Alignment (workshops)
-- Workflow Planning
-- Application Design
+## Scaling to Your Task
 
-### 🟢 CONSTRUCTION PHASE (Day 2)
-**Focus**: HOW to build it
-
-- Functional Design
-- Code Generation (with tests!)
-- Build and Test
-- Integration
-
-### 🟡 OPERATIONS PHASE (End of Day 2)
-**Focus**: Production readiness
-
-- Production Readiness Assessment
-- Deployment Planning
-- Post-Workshop Tasks
-
-## Workshop Schedule
-
-### Day 1: Inception Phase
-
-| Time | Activity | Who |
-|------|----------|-----|
-| 9:00 | Kickoff, AIDLC overview | All |
-| 9:30 | Workspace Detection | All |
-| 10:00 | Reverse Engineering | All |
-| 12:00 | Lunch | |
-| 13:00 | Requirements Analysis | Per team |
-| 14:30 | Cross-Team Alignment | All |
-| 15:30 | Workflow Planning | Per team |
-| 16:30 | Application Design | Per team |
-
-### Day 2: Construction Phase
-
-| Time | Activity | Who |
-|------|----------|-----|
-| 9:00 | Review Day 1, resolve questions | All |
-| 9:30 | Functional Design | Per team |
-| 10:30 | Code Generation | Per team |
-| 12:00 | Lunch | |
-| 13:00 | Continue Code Gen + Tests | Per team |
-| 15:00 | Build and Test | Per team |
-| 15:30 | Production Readiness Assessment | Per team |
-| 16:00 | Integration | All |
-| 16:30 | Demo + Retrospective | All |
+| Task Size | Approach |
+|-----------|----------|
+| **Quick** (< 1 hour) | Mental checklist: think → test → code → verify → commit |
+| **Standard** (1h - 1 day) | Lightweight docs: requirements + approach in one file |
+| **Complex** (> 1 day) | Full AIDLC: formal requirements, design, state tracking |
 
 ## Skills
 
-On-demand development guidance. Use `/skill-name` with Claude Code or reference directly:
+On-demand guidance for common workflows:
 
 | Skill | Purpose |
 |-------|---------|
@@ -153,40 +84,46 @@ On-demand development guidance. Use `/skill-name` with Claude Code or reference 
 | `pre-commit` | Quality checks before committing |
 | `write-tests` | Test-driven development workflow |
 
-See [skills/README.md](skills/README.md) for details.
+Use `/skill-name` with Claude Code or reference directly.
 
-## Key Rules
+## Key Principles
 
-1. **Don't skip tests** — Generate tests alongside code
-2. **Commit at gates** — `git commit` after each approval
-3. **Clear context** — Start fresh after each stage
-4. **No vibe coding** — Update design docs before changing code
-5. **Own your files** — Each team edits only their components
-6. **Questions in files** — Use `[Answer]:` tags, not chat responses
-7. **Validate content** — Check diagrams and formatting before saving
+1. **Understand before building** — Don't assume requirements
+2. **Design before coding** — Plan the approach
+3. **Test alongside code** — Never skip tests
+4. **Document decisions** — Track why, not just what
+5. **Validate at gates** — Check before moving forward
+
+## Files You'll Create
+
+When using AIDLC, you'll create these in your project:
+
+```
+your-project/
+└── aidlc-docs/
+    ├── state.md           # Progress tracking
+    ├── requirements.md    # Requirements + Q&A
+    └── design.md          # Technical design
+```
+
+These are working documents — commit them for history, delete when done.
 
 ## Customization
 
 ### For Your Tech Stack
 
-Create or edit `templates/tech-env.md` to specify:
-- Programming language and frameworks
-- Build system and commands
-- Code patterns and conventions
+Copy and customize `templates/tech-env.md` to document:
+- Languages and frameworks
+- Build commands
+- Code patterns
 - Testing approach
 
-### Adding Security Rules
+### Adding Rules
 
-Create extensions in `.aidlc-rule-details/extensions/`:
-- Files without `.opt-in.md` suffix are always enforced
-- Files with `.opt-in.md` suffix require explicit user opt-in
-
-## Solo Mode
-
-For single-person projects, use the streamlined [SOLO-MODE.md](SOLO-MODE.md) workflow:
-- Quick Inception (30-60 min)
-- Build (iterative)
-- Wrap Up (15 min)
+Add custom rules to `.aidlc-rule-details/extensions/`:
+- Security requirements
+- Team conventions
+- Project-specific guidelines
 
 ## References
 
@@ -197,5 +134,5 @@ For single-person projects, use the streamlined [SOLO-MODE.md](SOLO-MODE.md) wor
 
 ## License
 
-This adaptation is provided as-is for workshop use. Original AIDLC methodology 
-by AWS Labs under Apache 2.0 license.
+This adaptation is provided as-is. Original AIDLC methodology by AWS Labs 
+under Apache 2.0 license.
