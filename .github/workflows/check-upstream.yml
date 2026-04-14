@@ -196,8 +196,46 @@ jobs:
           git commit -m "chore: update upstream last-checked commit" || true
           git push || true
 
-      - name: No updates summary
-        if: steps.upstream.outputs.has_updates == 'false' && github.event.inputs.force_check != 'true'
+      - name: Write job summary
+        if: always()
         run: |
-          echo "✅ No new upstream changes since last check"
-          echo "Last checked commit: ${{ steps.last-check.outputs.commit }}"
+          cat << EOF >> $GITHUB_STEP_SUMMARY
+          # Upstream AIDLC Sync Check
+
+          | Item | Value |
+          |------|-------|
+          | **Upstream repo** | [${{ env.UPSTREAM_REPO }}](https://github.com/${{ env.UPSTREAM_REPO }}) |
+          | **Last checked commit** | \`${{ steps.last-check.outputs.commit || 'none' }}\` |
+          | **Latest upstream commit** | \`${{ steps.upstream.outputs.latest_commit }}\` |
+          | **Commit date** | ${{ steps.upstream.outputs.commit_date }} |
+          | **Commit message** | ${{ steps.upstream.outputs.commit_msg }} |
+
+          ## Result
+
+          EOF
+
+          if [ "${{ steps.upstream.outputs.has_updates }}" = "true" ]; then
+            cat << EOF >> $GITHUB_STEP_SUMMARY
+          ### ✅ Updates detected — Issue created
+
+          | Category | Count |
+          |----------|-------|
+          | Rule changes | ${{ steps.analyze.outputs.rule_changes }} |
+          | Template changes | ${{ steps.analyze.outputs.template_changes }} |
+          | Documentation changes | ${{ steps.analyze.outputs.doc_changes }} |
+
+          **Priority:** ${{ steps.analyze.outputs.priority }}
+
+          An issue has been created for review. Use \`/sync-upstream\` to incorporate changes.
+
+          [Compare changes](https://github.com/${{ env.UPSTREAM_REPO }}/compare/${{ steps.last-check.outputs.commit }}...${{ steps.upstream.outputs.latest_commit }})
+          EOF
+          else
+            cat << EOF >> $GITHUB_STEP_SUMMARY
+          ### ✅ No updates
+
+          The upstream repository has no new changes since the last check.
+
+          Nothing to do.
+          EOF
+          fi
