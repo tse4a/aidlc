@@ -74,6 +74,15 @@ aidlc-workshop/
 │       └── infrastructure-design.md
 ├── inputs/                    # Team input documents
 │   └── .gitkeep
+├── skills/                    # On-demand development skills
+│   ├── README.md              # Skills overview
+│   ├── secure-code.md         # Security hardening
+│   ├── pre-commit.md          # Quality checks
+│   └── write-tests.md         # TDD workflow
+├── docs/                      # Best practices & guides
+│   ├── best-practices.md      # Development best practices
+│   └── pre-commit-checklist.md # Quick reference
+├── SOLO-MODE.md               # Single-person workflow
 └── aidlc-docs/                # Generated during workshop
     └── .gitkeep
 ```
@@ -134,6 +143,18 @@ aidlc-workshop/
 | 16:00 | Integration | All |
 | 16:30 | Demo + Retrospective | All |
 
+## Skills
+
+On-demand development guidance. Use `/skill-name` with Claude Code or reference directly:
+
+| Skill | Purpose |
+|-------|---------|
+| `secure-code` | Security hardening (Dockerfile, shell, API, database) |
+| `pre-commit` | Quality checks before committing |
+| `write-tests` | Test-driven development workflow |
+
+See [skills/README.md](skills/README.md) for details.
+
 ## Key Rules
 
 1. **Don't skip tests** — Generate tests alongside code
@@ -160,10 +181,19 @@ Create extensions in `.aidlc-rule-details/extensions/`:
 - Files without `.opt-in.md` suffix are always enforced
 - Files with `.opt-in.md` suffix require explicit user opt-in
 
+## Solo Mode
+
+For single-person projects, use the streamlined [SOLO-MODE.md](SOLO-MODE.md) workflow:
+- Quick Inception (30-60 min)
+- Build (iterative)
+- Wrap Up (15 min)
+
 ## References
 
 - [AWS AI-DLC Blog](https://aws.amazon.com/blogs/devops/ai-driven-development-life-cycle/)
 - [AI-DLC GitHub](https://github.com/awslabs/aidlc-workflows)
+- [Best Practices](docs/best-practices.md)
+- [Pre-Commit Checklist](docs/pre-commit-checklist.md)
 
 ## License
 
