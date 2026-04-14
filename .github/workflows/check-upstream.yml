@@ -14,11 +14,12 @@ on:
 env:
   UPSTREAM_REPO: awslabs/aidlc-workflows
   UPSTREAM_BRANCH: main
-  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
 jobs:
   check-updates:
     runs-on: ubuntu-latest
+    env:
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
     permissions:
       contents: write
       pull-requests: write
