@@ -17,25 +17,28 @@ It scales from quick fixes to complex features — use what you need.
 
 ## Quick Start
 
-### Option 1: Copy to Your Project
+**New here?** Read the [Getting Started Guide](GETTING-STARTED.md) for a complete walkthrough.
+
+### 1. Install Superpowers Plugin
 
 ```bash
-# Copy the essentials
-cp AIDLC.md /path/to/your/project/
+claude plugins install superpowers
+```
+
+### 2. Copy to Your Project
+
+```bash
+cp AIDLC.md CLAUDE.md GETTING-STARTED.md /path/to/your/project/
+cp -r .claude /path/to/your/project/
 mkdir -p /path/to/your/project/aidlc-docs
 ```
 
-### Option 2: Reference This Repo
-
-Add to your project's CLAUDE.md or instructions:
-```
-For complex features, follow the AIDLC workflow from [path/to/AIDLC.md]
-```
-
-### Starting a Session
+### 3. Start Building
 
 ```
-Read AIDLC.md. Help me build [brief description].
+/brainstorming
+
+I want to build [description]
 ```
 
 ## Directory Structure
@@ -150,6 +153,8 @@ Add custom rules to `.aidlc-rule-details/extensions/`:
 
 ## References
 
+- [Getting Started Guide](GETTING-STARTED.md) — Complete user guide
+- [CLAUDE.md](CLAUDE.md) — How superpowers + AIDLC work together
 - [AWS AI-DLC Blog](https://aws.amazon.com/blogs/devops/ai-driven-development-life-cycle/)
 - [AI-DLC GitHub](https://github.com/awslabs/aidlc-workflows)
 - [Best Practices](docs/best-practices.md)

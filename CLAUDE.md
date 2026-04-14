@@ -4,51 +4,130 @@ AI-Driven Development Life Cycle toolkit for structured, AI-assisted development
 
 ## Quick Start
 
+**New here?** Read [GETTING-STARTED.md](GETTING-STARTED.md) for a complete guide.
+
+**Starting a feature:**
 ```
-Read AIDLC.md. Help me build [description].
+/brainstorming
+
+I want to build [description]
 ```
 
-## Plugins
+**Resuming work:**
+```
+Check aidlc-docs/state.md and resume from where we left off.
+```
 
-This project uses the **superpowers** plugin for enhanced workflows:
+---
 
-- `/brainstorming` — Turn ideas into designs before implementation
-- `/writing-plans` — Create detailed implementation plans
-- `/debugging` — Systematic debugging workflow
+## How Superpowers + AIDLC Work Together
 
-The plugin is enabled in `.claude/settings.json`.
+**AIDLC** is the methodology (three phases, state tracking, decision records).
+**Superpowers** provides tactical skills that execute within AIDLC phases.
 
-## Skills
+```
+┌─────────────────────────────────────────────────────────┐
+│  AIDLC Phase          │  Superpowers Skill             │
+├─────────────────────────────────────────────────────────┤
+│  🔵 INCEPTION         │  /brainstorming                │
+│     Understand &      │  - Clarify requirements        │
+│     Design            │  - Ask questions               │
+│                       │  - Design approach             │
+│                       │  - Write spec                  │
+├─────────────────────────────────────────────────────────┤
+│  (Bridge)             │  /writing-plans                │
+│                       │  - Detailed implementation     │
+├─────────────────────────────────────────────────────────┤
+│  🟢 CONSTRUCTION      │  /write-tests, /secure-code    │
+│     Build & Test      │  - TDD workflow                │
+│                       │  - Security hardening          │
+│                       │  /pre-commit                   │
+│                       │  - Quality gate                │
+├─────────────────────────────────────────────────────────┤
+│  🟡 OPERATIONS        │  (Use AIDLC templates)         │
+│     Ship & Maintain   │  - Production readiness        │
+└─────────────────────────────────────────────────────────┘
+```
 
-Local skills in `.claude/skills/`:
+**In practice:** Use `/brainstorming` for inception, superpowers skills for construction, AIDLC templates for operations.
 
-| Skill | Purpose | Invoke |
-|-------|---------|--------|
-| `secure-code` | Security hardening | `/secure-code` |
-| `pre-commit` | Quality checks | `/pre-commit` |
-| `write-tests` | TDD workflow | `/write-tests` |
+---
 
-Skills auto-trigger based on context. Each has:
-- `SKILL.md` — Quick checklist (token-efficient)
+## Superpowers Plugin
+
+Enabled in `.claude/settings.json`. Provides:
+
+| Skill | Purpose | AIDLC Phase |
+|-------|---------|-------------|
+| `/brainstorming` | Clarify requirements, design approach | Inception |
+| `/writing-plans` | Detailed implementation plan | Inception → Construction |
+| `/debugging` | Systematic troubleshooting | Any |
+
+---
+
+## Local Skills
+
+Project skills in `.claude/skills/` (token-efficient structure):
+
+| Skill | Purpose | When to Use |
+|-------|---------|-------------|
+| `/secure-code` | Security hardening | Dockerfile, shell, API, database |
+| `/pre-commit` | Quality checks | Before every commit |
+| `/write-tests` | TDD workflow | Writing tests |
+
+Each skill has:
+- `SKILL.md` — Quick checklist (auto-loaded)
 - `references/` — Deep-dive guides (loaded on demand)
 
-## Workflow
+---
 
-### For Complex Features
+## Workflow by Task Size
 
-1. **Brainstorm first** — Use `/brainstorming` to clarify requirements and design
-2. **Plan** — Use `/writing-plans` for implementation steps
-3. **Build** — Follow TDD with `/write-tests`
-4. **Verify** — Use `/pre-commit` before committing
-5. **Secure** — Use `/secure-code` for security-sensitive code
+### Quick Task (< 1 hour)
+```
+Think → Test → Code → Verify → Commit
+```
+Use `/pre-commit` before committing.
 
-### For Quick Tasks
+### Standard Task (1h - 1 day)
+```
+/brainstorming → Build → /pre-commit → Commit
+```
 
-Skip formal process. Mental checklist:
-1. Think → 2. Test → 3. Code → 4. Verify → 5. Commit
+### Complex Task (> 1 day)
+```
+/brainstorming → /writing-plans → Build → /pre-commit → Operations checklist
+```
+Track state in `aidlc-docs/state.md`.
+
+---
+
+## State Tracking (Optional)
+
+For multi-session work, use `aidlc-docs/state.md`:
+
+```markdown
+# State: [Feature Name]
+
+## Current Phase
+🟢 Construction
+
+## Progress
+- [x] Requirements (via /brainstorming)
+- [x] Design approved
+- [ ] Implementation
+- [ ] Tests
+
+## Next Step
+[What to do next]
+```
+
+---
 
 ## References
 
-- [AIDLC.md](AIDLC.md) — Full workflow documentation
+- [GETTING-STARTED.md](GETTING-STARTED.md) — Complete user guide
+- [AIDLC.md](AIDLC.md) — Full methodology documentation
 - [docs/best-practices.md](docs/best-practices.md) — Development guidelines
 - [docs/pre-commit-checklist.md](docs/pre-commit-checklist.md) — Quick reference
+- [templates/](templates/) — Document templates
