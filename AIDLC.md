@@ -350,15 +350,17 @@ your-project/
 
 ## Skills
 
-On-demand guidance for common workflows:
+On-demand guidance loaded from `.claude/skills/`:
 
-| Skill | When to Use |
-|-------|-------------|
-| `secure-code` | Security-sensitive code |
-| `pre-commit` | Before committing |
-| `write-tests` | Writing tests (TDD) |
+| Skill | When to Use | Deep-Dive |
+|-------|-------------|-----------|
+| `/secure-code` | Security-sensitive code | `references/*.md` |
+| `/pre-commit` | Before committing | `references/*.md` |
+| `/write-tests` | Writing tests (TDD) | `references/*.md` |
 
-See `skills/` directory for details.
+Each skill has:
+- `SKILL.md` — Quick checklist (auto-loaded, token-efficient)
+- `references/` — Detailed guides (loaded on demand)
 
 ---
 

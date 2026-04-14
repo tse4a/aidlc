@@ -43,19 +43,28 @@ Read AIDLC.md. Help me build [brief description].
 ```
 aidlc/
 ├── AIDLC.md                   # Main workflow (start here)
-├── skills/                    # On-demand development guidance
-│   ├── secure-code.md         # Security hardening
-│   ├── pre-commit.md          # Quality checks
-│   └── write-tests.md         # TDD workflow
+├── CLAUDE.md                  # Claude Code project instructions
+├── .claude/
+│   ├── settings.json          # Enables superpowers plugin
+│   └── skills/                # Local skills (auto-loaded)
+│       ├── secure-code/
+│       │   ├── SKILL.md       # Quick checklist
+│       │   └── references/    # Deep-dive guides
+│       ├── pre-commit/
+│       │   ├── SKILL.md
+│       │   └── references/
+│       └── write-tests/
+│           ├── SKILL.md
+│           └── references/
 ├── docs/                      # Reference materials
-│   ├── best-practices.md      # Development guidelines
+│   ├── best-practices.md
 │   └── pre-commit-checklist.md
 ├── templates/                 # Document templates
-│   ├── tech-env.md            # Technical environment
-│   ├── vision-brownfield.md   # Feature in existing code
-│   ├── vision-greenfield.md   # New project
-│   └── operations/            # Production readiness
-└── .aidlc-rule-details/       # Detailed methodology rules
+│   ├── tech-env.md
+│   ├── vision-brownfield.md
+│   ├── vision-greenfield.md
+│   └── operations/
+└── .aidlc-rule-details/       # Methodology rules
 ```
 
 ## The Three Phases
@@ -74,17 +83,31 @@ aidlc/
 | **Standard** (1h - 1 day) | Lightweight docs: requirements + approach in one file |
 | **Complex** (> 1 day) | Full AIDLC: formal requirements, design, state tracking |
 
-## Skills
+## Superpowers Plugin
 
-On-demand guidance for common workflows:
+This repo enables the **superpowers** plugin (`.claude/settings.json`) for enhanced workflows:
 
-| Skill | Purpose |
-|-------|---------|
-| `secure-code` | Security hardening (Dockerfile, shell, API, database) |
-| `pre-commit` | Quality checks before committing |
-| `write-tests` | Test-driven development workflow |
+| Skill | Purpose | When to Use |
+|-------|---------|-------------|
+| `/brainstorming` | Turn ideas into designs | Before implementing complex features |
+| `/writing-plans` | Create implementation plans | After brainstorming, before coding |
+| `/debugging` | Systematic debugging | When troubleshooting issues |
 
-Use `/skill-name` with Claude Code or reference directly.
+Install superpowers: `claude plugins install superpowers`
+
+## Local Skills
+
+Project-specific skills in `.claude/skills/` with token-efficient structure:
+- `SKILL.md` — Quick checklist, loaded automatically
+- `references/` — Deep-dive guides, loaded on demand
+
+| Skill | Purpose | Invoke |
+|-------|---------|--------|
+| `secure-code` | Security hardening | `/secure-code` |
+| `pre-commit` | Quality checks | `/pre-commit` |
+| `write-tests` | TDD workflow | `/write-tests` |
+
+Skills auto-trigger based on context (e.g., "security review" loads secure-code).
 
 ## Key Principles
 
