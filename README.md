@@ -165,5 +165,7 @@ Add custom rules to `.aidlc-rule-details/extensions/`:
 
 ## License
 
-This adaptation is provided as-is. Original AIDLC methodology by AWS Labs 
-under Apache 2.0 license.
+MIT License. See [LICENSE](LICENSE).
+
+This is an adaptation of [AWS AI-DLC](https://github.com/awslabs/aidlc-workflows) (MIT-0),
+streamlined for everyday use with Claude Code and superpowers integration.
